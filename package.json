@@ -1,0 +1,44 @@
+{ "name": "precentor",
+  "description": "A scratchpad for designing / optimizing workflows",
+  "version": "0.0.1",
+  "latest": "0.0.1",
+  "author": "Andrew Carpenter",
+  "homepage": "http://github.com/musocrat/precentor",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/musocrat/precentor.git"
+  },
+  "bugs": {
+    "url": "http://github.com/musocrat/precentor/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/musocrat/precentor/master/LICENSE-MIT"
+    }
+  ],
+  "scripts": {
+    "test": "grunt test",
+    "dist": "grunt dist"
+  },
+  "dependencies": {
+    "nedb": "^1.0.0",
+    "csv": "^0.4.1",
+    "express": "^4.11.0"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-jshint": "^0.10.0",
+    "jshint-stylish": "^1.0.0",
+    "grunt-contrib-uglify": "^0.7.0",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-newer": "^1.1.0",
+    "grunt-contrib-coffee": "^0.12.0",
+    "grunt-nodemon": "^0.3.0"
+  },
+  "main": "lib/server.js",
+  "engines": {
+    "node": ">=0.12.0"
+  }
+}
