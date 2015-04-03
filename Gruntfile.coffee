@@ -46,7 +46,7 @@ module.exports = (grunt) ->
     coffee:
       compile:
         options:
-          sourceMap: false
+          sourceMap: true
         expand: true
         cwd: '<%= config.src %>'
         src: ['*.coffee']
@@ -69,7 +69,7 @@ module.exports = (grunt) ->
       options:
         watch: ['<%= config.lib %>']
       dev:
-        script: '<%= config.lib %>/sploder.js'
+        script: '<%= config.lib %>/precentor.js'
 
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-jshint'
