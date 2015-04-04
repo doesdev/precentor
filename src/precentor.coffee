@@ -10,15 +10,15 @@
     return noElErr() unless optEls
     rawEls = []; els = []
     pushRawEls = (e) ->
-      if _isStr(e) then rawEls.push(el: e, opts: null)
-      else el = _topKeyOfObj(e); rawEls.push(el: el, opts: e[el] || null)
+      if _isStr(e) then rawEls.push({el: e, opts: null})
+      else el = _topKeyOfObj(e); rawEls.push({el: el, opts: (e[el] || null)})
     if _isAry(optEls) then (pushRawEls(e) for e in optEls) else pushRawEls(optEls)
     for el in rawEls
       if (domEls = _getEl(el.el))
         (if _isElAry(domEls) then (els.push(el: de, opts: el.opts) for de in domEls) else els.push(el: domEls, el.opts))
     return noElErr() if els.length == 0
     settings = obj.settings || {}
-    (new Precentor(el, settings)) for el in els
+    (new Precentor(el, settings)) for el in els when el
     return
 
   # Precentor Class
@@ -28,12 +28,27 @@
       @inst = _randar()
       @el = @elObj.el
       @buildOpts()
+      @buildEls()
 
     buildOpts: =>
       _extObj(@opts, @elObj.opts)
       elDataSet = @el.dataset
       normalize = (k, v) => @opts[k.replace(/^precent(.)(.*)/, (a, b, c)-> b.toLowerCase() + c)] = v; return
       normalize(k, v) for k, v of elDataSet
+
+    buildEls: =>
+      (@target = dom.createElement('span')).className = 'precentor-target'
+      @el.parentNode.insertBefore(@target, @el)
+      @target.appendChild(@el)
+      @target.insertAdjacentHTML 'beforeend', _domStr(
+        tag: 'div'
+        attrs:
+          id: "wrap_#{@inst}"
+          class: 'precentor-wrapper'
+          style: "z-index: #{_val(@opts.zIndex, 2100)}; opacity: 0;"
+        children: []
+      )
+      @wrapper = dom.getElementById("wrap_#{@inst}")
       return
 
   # HELPERS
@@ -63,7 +78,7 @@
     b: parseInt((_prepHex(hex)).substring(4, 6), 16)
 
   # INIT
-  @precentor = precentor
+  window.precentor = precentor
   return
 
 ) document

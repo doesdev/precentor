@@ -8,6 +8,9 @@ module.exports = (grunt) ->
     lib: 'lib'
     dist: 'dist'
     test: 'test'
+    demo: 'demo'
+    demo_js: 'demo/js'
+    demo_css: 'demo/css'
 
   # Define the configuration for all the tasks
   grunt.initConfig
@@ -25,6 +28,12 @@ module.exports = (grunt) ->
       test:
         files: ['<%= config.test %>/*']
         tasks: ['newer:mochaTest']
+      copy:
+        files: ['<%= config.lib %>/*.js']
+        tasks: ['newer:copy']
+      sass_watcher:
+        files: ['<%= config.demo_css %>/*.sass'],
+        tasks: ['newer:sass']
 
   # Make sure code styles are up to par and there are no obvious mistakes
     jshint:
@@ -64,6 +73,23 @@ module.exports = (grunt) ->
         dest: '<%= config.dist %>'
         ext: '.min.js'
 
+  # Copy js to demo dir
+    copy:
+      demo:
+        files: [
+          src: '<%= config.lib %>/precentor.js'
+          dest: '<%= config.demo_js %>/precentor.js'
+        ,
+          src: '<%= config.lib %>/precentor.js.map'
+          dest: '<%= config.demo_js %>/precentor.js.map'
+        ]
+
+
+  # Sassify CSS
+    sass:
+      dist:
+        files: ['<%= config.demo_css %>/precentor.css': '<%= config.demo_css %>/precentor.sass']
+
   # Run main script
     nodemon:
       options:
@@ -78,6 +104,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-newer'
   grunt.loadNpmTasks 'grunt-nodemon'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
+  grunt.loadNpmTasks 'grunt-contrib-sass'
 
   grunt.registerTask 'build', ['coffee:compile', 'jshint']
   grunt.registerTask 'test', ['newer:coffee:compile', 'newer:jshint', 'mochaTest']
