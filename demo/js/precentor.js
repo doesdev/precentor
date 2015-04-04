@@ -71,11 +71,13 @@
     Precentor = (function() {
       function Precentor(elObj, opts) {
         this.elObj = elObj;
+        this.wfNode = __bind(this.wfNode, this);
         this.buildEls = __bind(this.buildEls, this);
         this.buildOpts = __bind(this.buildOpts, this);
         this.opts = _extObj({}, opts);
         this.inst = _randar();
         this.el = this.elObj.el;
+        this.wfNodes = {};
         this.buildOpts();
         this.buildEls();
       }
@@ -108,11 +110,47 @@
           attrs: {
             id: "wrap_" + this.inst,
             "class": 'precentor-wrapper',
-            style: "z-index: " + (_val(this.opts.zIndex, 2100)) + "; opacity: 0;"
+            style: "z-index: " + (_val(this.opts.zIndex, 2100)) + ";"
+          },
+          children: [
+            {
+              tag: 'div',
+              attrs: {
+                "class": 'precentor-inner'
+              },
+              children: [
+                {
+                  tag: 'div',
+                  attrs: {
+                    "class": 'wf-add-form',
+                    id: "wf_add_form_" + this.inst,
+                    style: 'display: none;'
+                  }
+                }, {
+                  tag: 'button',
+                  attrs: {
+                    "class": 'wf-add-btn',
+                    id: "wf_add_btn_" + this.inst
+                  },
+                  inner: 'Add Workflow Step'
+                }
+              ]
+            }
+          ]
+        }));
+        this.wrapper = dom.getElementById("wrap_" + this.inst);
+        this.wfAddBtn = dom.getElementById("wf_add_btn_" + this.inst);
+      };
+
+      Precentor.prototype.wfNode = function() {
+        return this.wrapper.insertAdjacentHTML('beforeend', _domStr({
+          tag: 'div',
+          attrs: {
+            id: "wrap_" + this.inst,
+            "class": 'wf-node'
           },
           children: []
         }));
-        this.wrapper = dom.getElementById("wrap_" + this.inst);
       };
 
       return Precentor;
@@ -201,11 +239,12 @@
       return (Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)).substring(0, 16);
     };
     _prepHex = function(hex) {
-      hex = hex.replace(/^#/, '');
-      if (hex.length === 3) {
-        return "" + hex + hex;
+      var nex;
+      nex = hex.replace(/^#/, '');
+      if (nex.length === 3) {
+        return "" + nex + nex;
       } else {
-        return hex;
+        return nex;
       }
     };
     _fullHex = function(hex) {

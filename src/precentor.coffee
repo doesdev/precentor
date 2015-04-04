@@ -27,6 +27,7 @@
       @opts = _extObj({}, opts)
       @inst = _randar()
       @el = @elObj.el
+      @wfNodes = {}
       @buildOpts()
       @buildEls()
 
@@ -45,11 +46,38 @@
         attrs:
           id: "wrap_#{@inst}"
           class: 'precentor-wrapper'
-          style: "z-index: #{_val(@opts.zIndex, 2100)}; opacity: 0;"
-        children: []
+          style: "z-index: #{_val(@opts.zIndex, 2100)};"
+        children: [
+          tag: 'div'
+          attrs:
+            class: 'precentor-inner'
+          children: [
+            tag: 'div'
+            attrs:
+              class: 'wf-add-form'
+              id: "wf_add_form_#{@inst}"
+              style: 'display: none;'
+          ,
+            tag: 'button'
+            attrs:
+              class: 'wf-add-btn'
+              id: "wf_add_btn_#{@inst}"
+            inner: 'Add Workflow Step'
+          ]
+        ]
       )
       @wrapper = dom.getElementById("wrap_#{@inst}")
+      @wfAddBtn = dom.getElementById("wf_add_btn_#{@inst}")
       return
+
+    wfNode: =>
+      @wrapper.insertAdjacentHTML 'beforeend', _domStr(
+        tag: 'div'
+        attrs:
+          id: "wrap_#{@inst}"
+          class: 'wf-node'
+        children: []
+      )
 
   # HELPERS
   _val = (p, d) -> return if p in [false, 'false', 0, '0'] then p else p || d
@@ -70,7 +98,7 @@
     els = if el.charAt(0) == '#' then dom.getElementById(el.substr(1)) else dom.getElementsByClassName(el.substr(1))
     return if _isAry(els) && els.length == 0 then null else els
   _randar = -> (Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)).substring(0, 16)
-  _prepHex = (hex) -> hex = hex.replace(/^#/, ''); return if hex.length == 3 then "#{hex}#{hex}" else hex
+  _prepHex = (hex) -> nex = hex.replace(/^#/, ''); return if nex.length == 3 then "#{nex}#{nex}" else nex
   _fullHex = (hex) -> return if hex == 'transparent' then hex else "#" + _prepHex(hex)
   _cc = (hex) ->
     r: parseInt((_prepHex(hex)).substring(0, 2), 16)
